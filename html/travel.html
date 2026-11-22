@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Wayfarer PH – Philippine Domestic Flights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/travel.css">
+</head>
+<body>
+<header>
+    <div class="wrap">
+        <span class="brand">WAYFARER PH</span>
+        <div class="nav">
+            <a href="../traveler/dashboard.php" style="color:#fff;margin-right:12px">Dashboard</a>
+            <button id="theme" type="button" aria-label="Toggle dark mode">Theme</button>
+        </div>
+    </div>
+</header>
+<section class="hero">
+    <div class="wrap">
+        <h1>Fly anywhere in the Philippines.</h1>
+        <p>Compare domestic flights across Philippine Airlines, Cebu Pacific, AirAsia Philippines and PAL Express.</p>
+    </div>
+</section>
+<div class="wrap">
+    <form class="search" id="search">
+        <div class="trip-type" role="radiogroup" aria-label="Trip type">
+            <label><input type="radio" name="tt" value="one" checked> One-way</label>
+            <label><input type="radio" name="tt" value="round"> Round trip</label>
+        </div>
+
+        <div class="fields">
+            <label>From
+                <select id="from"></select>
+            </label>
+            <button class="swap" type="button" id="swap" aria-label="Swap origin and destination" style="align-self:end">⇄</button>
+            <label>To
+                <select id="to"></select>
+            </label>
+            <label>Depart
+                <input type="date" id="date" required>
+            </label>
+            <label id="retLbl" hidden>Return
+                <input type="date" id="ret">
+            </label>
+            <label>Passengers
+                <input type="number" id="pax" min="1" max="9" value="1">
+            </label>
+            <button class="btn" type="submit">Search flights</button>
+        </div>
+    </form>
+    <main>
+        <section>
+            <div class="chips" id="chips" role="group" aria-label="Airline"></div>
+            <div class="bar">
+                <div>
+                    <h2 id="heading">Search for flights</h2>
+                    <small id="sub">Choose your route and dates above.</small>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px">
+                    Sort
+                    <select id="sort" style="width:auto">
+                        <option value="price">Cheapest</option>
+                        <option value="dep">Earliest</option>
+                        <option value="dur">Fastest</option>
+                    </select>
+                </label>
+            </div>
+            <div class="board" id="board" aria-live="polite">
+                <div class="empty">Results will appear here.</div>
+            </div>
+        </section>
+        <aside>
+            <h2>My bookings</h2>
+            <div id="trips"></div>
+        </aside>
+    </main>
+</div>  
+<dialog id="dlg">
+    <form method="dialog" id="bookForm">
+        <h2>Confirm booking</h2>
+        <div class="sum" id="dSum"></div>
+        <div class="actions">
+            <button class="btn ghost" value="cancel" formnovalidate>Back</button>
+            <button class="btn" value="ok">Pay and book</button>
+        </div>
+    </form>
+</dialog>
+<div id= "toast" role="status"></div>
+
+<script src="../assets/js/travel.js"></script>
+
+</body>
+</html>

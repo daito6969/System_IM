@@ -1,0 +1,19 @@
+{
+    "php.validate.executablePath": "",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "MySQL  8.0",
+            "username": "root",
+            "database": "practice_db"
+        }
+    ]
+}
