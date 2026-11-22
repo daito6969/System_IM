@@ -1,6 +1,14 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+
+if (user()) {
+  header('Location: ' . home_for(user()['role']));
+  exit;
+}
+
 $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
+$old = $_SESSION['register_old'] ?? [];
+unset($_SESSION['register_old']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +44,7 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
     </div>
     <?php endif; ?>
 
-    <form method="post" action="actions/register_process.php" class="auth-form-aesthetic">
+    <form method="post" action="<?= BASE ?>/actions/register_process.php" class="auth-form-aesthetic" novalidate>
       <!-- Name Fields: First Name + MI -->
       <div class="form-row-2-1">
         <div class="input-group">
@@ -45,7 +53,7 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
           </label>
           <div class="input-inner">
             <span class="input-icon">👤</span>
-            <input type="text" id="first_name" name="first_name" placeholder="e.g. Juan" required autofocus>
+            <input type="text" id="first_name" name="first_name" value="<?= e($old['first_name'] ?? '') ?>" placeholder="e.g. Juan" autocomplete="given-name" maxlength="50" required autofocus>
           </div>
         </div>
 
@@ -54,7 +62,7 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
             <span>M.I.</span>
           </label>
           <div class="input-inner">
-            <input type="text" id="middle_initial" name="middle_initial" placeholder="D." maxlength="4" style="text-align:center;">
+            <input type="text" id="middle_initial" name="middle_initial" value="<?= e($old['middle_initial'] ?? '') ?>" placeholder="D." maxlength="4" autocomplete="additional-name" style="text-align:center;">
           </div>
         </div>
       </div>
@@ -66,7 +74,7 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
             <span>Last Name <span class="req">*</span></span>
           </label>
           <div class="input-inner">
-            <input type="text" id="last_name" name="last_name" placeholder="e.g. Dela Cruz" required>
+            <input type="text" id="last_name" name="last_name" value="<?= e($old['last_name'] ?? '') ?>" placeholder="e.g. Dela Cruz" autocomplete="family-name" maxlength="50" required>
           </div>
         </div>
 
@@ -75,7 +83,7 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
             <span>Suffix <span class="opt">(Optional)</span></span>
           </label>
           <div class="input-inner">
-            <input type="text" id="suffix" name="suffix" placeholder="Jr., III" maxlength="10">
+            <input type="text" id="suffix" name="suffix" value="<?= e($old['suffix'] ?? '') ?>" placeholder="Jr., III" maxlength="10">
           </div>
         </div>
       </div>
@@ -87,18 +95,30 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
         </label>
         <div class="input-inner">
           <span class="input-icon">✉️</span>
-          <input type="email" id="email" name="email" placeholder="name@example.com" required>
+          <input type="email" id="email" name="email" value="<?= e($old['email'] ?? '') ?>" placeholder="name@example.com" autocomplete="username" maxlength="191" required>
         </div>
       </div>
 
       <!-- Password -->
       <div class="input-group">
         <label for="password">
-          <span>Password <span class="req">*</span> <small>(at least 6 characters)</small></span>
+          <span>Password <span class="req">*</span> <small>(at least 8 characters)</small></span>
         </label>
         <div class="input-inner">
           <span class="input-icon">🔒</span>
-          <input type="password" id="password" name="password" minlength="6" placeholder="••••••••" required>
+          <input type="password" id="password" name="password" minlength="8" placeholder="Create a strong password" autocomplete="new-password" required>
+          <button type="button" class="password-toggle" data-target="password" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="confirm_password">
+          <span>Confirm Password <span class="req">*</span></span>
+        </label>
+        <div class="input-inner">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="confirm_password" name="confirm_password" minlength="8" placeholder="Repeat your password" autocomplete="new-password" required>
+          <button type="button" class="password-toggle" data-target="confirm_password" aria-label="Show password" aria-pressed="false">Show</button>
         </div>
       </div>
 
@@ -114,6 +134,39 @@ $registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
     </form>
   </div>
 </div>
+
+<script>
+document.querySelectorAll('.password-toggle').forEach(function(button) {
+  button.addEventListener('click', function() {
+    var input = document.getElementById(button.dataset.target);
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    button.textContent = show ? 'Hide' : 'Show';
+    button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    button.setAttribute('aria-pressed', show ? 'true' : 'false');
+  });
+});
+
+var form = document.querySelector('.auth-form-aesthetic');
+form.addEventListener('submit', function(event) {
+  var password = document.getElementById('password');
+  var confirmation = document.getElementById('confirm_password');
+  if (password.value !== confirmation.value) {
+    event.preventDefault();
+    confirmation.setCustomValidity('Passwords do not match.');
+    confirmation.reportValidity();
+  } else {
+    confirmation.setCustomValidity('');
+    var submit = form.querySelector('.auth-btn-primary');
+    submit.disabled = true;
+    submit.querySelector('span:first-child').textContent = 'Creating account…';
+  }
+});
+
+document.getElementById('confirm_password').addEventListener('input', function() {
+  this.setCustomValidity('');
+});
+</script>
 
 </body>
 </html>

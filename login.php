@@ -1,6 +1,14 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+
+if (user()) {
+  header('Location: ' . home_for(user()['role']));
+  exit;
+}
+
 $loginError = isset($_GET['error']) ? 'Invalid email or password. Please try again.' : '';
+$loginNotice = isset($_GET['logged_out']) ? 'You have been signed out securely.' : '';
+$email = trim((string) ($_GET['email'] ?? ''));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,16 +42,21 @@ $loginError = isset($_GET['error']) ? 'Invalid email or password. Please try aga
       <span class="alert-icon">⚠️</span>
       <span id="auth-alert-text"><?= e($loginError) ?></span>
     </div>
+    <?php elseif ($loginNotice): ?>
+    <div class="auth-alert auth-alert-success" role="status">
+      <span class="alert-icon">✓</span>
+      <span><?= e($loginNotice) ?></span>
+    </div>
     <?php endif; ?>
 
-    <form method="post" action="actions/login_process.php" class="auth-form-aesthetic">
+    <form method="post" action="<?= BASE ?>/actions/login_process.php" class="auth-form-aesthetic" novalidate>
       <div class="input-group">
         <label for="email">
           <span>Email Address</span>
         </label>
         <div class="input-inner">
           <span class="input-icon">✉️</span>
-          <input type="email" id="email" name="email" placeholder="name@example.com" required autofocus>
+          <input type="email" id="email" name="email" value="<?= e($email) ?>" placeholder="name@example.com" autocomplete="username" required autofocus>
         </div>
       </div>
 
@@ -53,7 +66,8 @@ $loginError = isset($_GET['error']) ? 'Invalid email or password. Please try aga
         </label>
         <div class="input-inner">
           <span class="input-icon">🔒</span>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
+          <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="button" class="password-toggle" data-target="password" aria-label="Show password" aria-pressed="false">Show</button>
         </div>
       </div>
 
@@ -67,24 +81,26 @@ $loginError = isset($_GET['error']) ? 'Invalid email or password. Please try aga
         <a href="<?= BASE ?>/register.php" class="auth-link">Create Account</a>
       </div>
     </form>
-
-    <!-- Quick Demo Box -->
-    <div class="auth-demo-card">
-      <div class="demo-card-title">🔑 Quick Demo Sign In:</div>
-      <div class="demo-card-body">
-        <div><b>Admin:</b> <code>admin@roadtrip.local</code> / <code>admin123</code></div>
-        <button type="button" class="demo-fill-btn" onclick="fillAdmin()">1-Click Fill Admin</button>
-      </div>
-    </div>
   </div>
 </div>
 
 <script>
-function fillAdmin() {
-  document.getElementById('email').value = 'admin@roadtrip.local';
-  document.getElementById('password').value = 'admin123';
-}
+document.querySelectorAll('.password-toggle').forEach(function(button) {
+  button.addEventListener('click', function() {
+    var input = document.getElementById(button.dataset.target);
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    button.textContent = show ? 'Hide' : 'Show';
+    button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    button.setAttribute('aria-pressed', show ? 'true' : 'false');
+  });
+});
 
+document.querySelector('.auth-form-aesthetic').addEventListener('submit', function() {
+  var submit = this.querySelector('.auth-btn-primary');
+  submit.disabled = true;
+  submit.querySelector('span:first-child').textContent = 'Signing in…';
+});
 </script>
 
 </body>
