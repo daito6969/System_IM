@@ -1,9 +1,6 @@
-<?php 
-require_once __DIR__ . '/includes/auth.php'; 
-if (user()) {
-  header('Location: ' . home_for(user()['role']));
-  exit;
-}
+<?php
+require_once __DIR__ . '/includes/auth.php';
+$loginError = isset($_GET['error']) ? 'Invalid email or password. Please try again.' : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +11,7 @@ if (user()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?= BASE ?>/assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="auth-body">
 
@@ -24,7 +21,7 @@ if (user()) {
   <div class="auth-panel">
     <!-- Brand / Header -->
     <div class="auth-brand-area">
-      <a href="<?= BASE ?>/" class="auth-brand-logo">
+      <a href="index.php" class="auth-brand-logo">
         <span class="auth-logo-badge">PH</span>
         <span class="auth-logo-text">WAYFARER</span>
       </a>
@@ -32,14 +29,14 @@ if (user()) {
       <p>Sign in to access your Philippine trips, flight bookings & budget planner.</p>
     </div>
 
-    <?php if (!empty($_GET['error'])): ?>
-      <div class="auth-alert">
-        <span class="alert-icon">⚠️</span>
-        <span>Invalid email or password. Please try again.</span>
-      </div>
+    <?php if ($loginError): ?>
+    <div class="auth-alert" id="auth-alert" role="alert">
+      <span class="alert-icon">⚠️</span>
+      <span id="auth-alert-text"><?= e($loginError) ?></span>
+    </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= BASE ?>/actions/login_process.php" class="auth-form-aesthetic">
+    <form method="post" action="actions/login_process.php" class="auth-form-aesthetic">
       <div class="input-group">
         <label for="email">
           <span>Email Address</span>
@@ -87,6 +84,7 @@ function fillAdmin() {
   document.getElementById('email').value = 'admin@roadtrip.local';
   document.getElementById('password').value = 'admin123';
 }
+
 </script>
 
 </body>

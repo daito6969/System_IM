@@ -1,9 +1,6 @@
-<?php 
-require_once __DIR__ . '/includes/auth.php'; 
-if (user()) {
-  header('Location: ' . home_for(user()['role']));
-  exit;
-}
+<?php
+require_once __DIR__ . '/includes/auth.php';
+$registerError = isset($_GET['error']) ? trim((string) $_GET['error']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +11,7 @@ if (user()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?= BASE ?>/assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="auth-body">
 
@@ -24,7 +21,7 @@ if (user()) {
   <div class="auth-panel">
     <!-- Brand / Header -->
     <div class="auth-brand-area">
-      <a href="<?= BASE ?>/" class="auth-brand-logo">
+      <a href="index.php" class="auth-brand-logo">
         <span class="auth-logo-badge">PH</span>
         <span class="auth-logo-text">WAYFARER</span>
       </a>
@@ -32,14 +29,14 @@ if (user()) {
       <p>Create your traveler account to plan custom Philippine itineraries, track budgets & book flights.</p>
     </div>
 
-    <?php if (!empty($_GET['error'])): ?>
-      <div class="auth-alert">
-        <span class="alert-icon">⚠️</span>
-        <span><?= e($_GET['error']) ?></span>
-      </div>
+    <?php if ($registerError): ?>
+    <div class="auth-alert" id="auth-alert" role="alert">
+      <span class="alert-icon">⚠️</span>
+      <span id="auth-alert-text"><?= e($registerError) ?></span>
+    </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= BASE ?>/actions/register_process.php" class="auth-form-aesthetic">
+    <form method="post" action="actions/register_process.php" class="auth-form-aesthetic">
       <!-- Name Fields: First Name + MI -->
       <div class="form-row-2-1">
         <div class="input-group">
