@@ -735,6 +735,193 @@ tr:hover td {
 }
 
 /* =========================================
+   RESPONSIVE: Tablets & Small Laptops
+   ========================================= */
+@media (max-width: 900px) {
+  .wayfarer-nav {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .nav-left {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .nav-center {
+    flex: 1 1 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 2px;
+  }
+  .nav-center::-webkit-scrollbar { display: none; }
+
+  .nav-center a {
+    font-size: 12.5px;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .nav-right {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+
+  main {
+    padding: 0 16px 48px;
+    margin: 20px auto;
+  }
+
+  h1 { font-size: 22px; }
+  h2 { font-size: 17px; }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .kpi-card {
+    padding: 14px 16px;
+  }
+
+  .kpi-val {
+    font-size: 22px;
+  }
+
+  .kpi-title {
+    font-size: 11px;
+  }
+
+  .plan-cta-banner {
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .plan-cta-banner h2 {
+    font-size: 18px;
+  }
+
+  .plan-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dash-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Horizontal scroll for tables on mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE: Phones
+   ========================================= */
+@media (max-width: 480px) {
+  .wayfarer-nav {
+    padding: 8px 12px;
+  }
+
+  .nav-brand {
+    font-size: 16px;
+  }
+
+  .nav-tagline {
+    display: none;
+  }
+
+  .nav-center a {
+    font-size: 11.5px;
+    padding: 5px 8px;
+  }
+
+  .theme-toggle-btn .theme-text {
+    display: none;
+  }
+
+  .user-chip span:not(.avatar-dot) {
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  main {
+    padding: 0 12px 36px;
+    margin: 14px auto;
+  }
+
+  h1 { font-size: 19px; }
+
+  .metrics-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .kpi-card {
+    padding: 12px 14px;
+  }
+
+  .kpi-val {
+    font-size: 20px;
+  }
+
+  .plan-cta-banner {
+    padding: 16px;
+  }
+
+  .plan-cta-banner h2 {
+    font-size: 16px;
+  }
+
+  .plan-cta-banner p {
+    font-size: 13px;
+  }
+
+  .dash-card {
+    padding: 16px;
+  }
+
+  .dash-card-header h3 {
+    font-size: 15px;
+  }
+
+  .auth-panel {
+    padding: 24px 20px;
+  }
+
+  .auth-brand-area h1 {
+    font-size: 20px;
+  }
+
+  .auth-wrapper {
+    padding: 16px;
+  }
+
+  form:not(.auth-form-aesthetic):not(.search-panel):not(.dialog-card) {
+    padding: 16px;
+  }
+}
+
+/* =========================================
    Unified Wayfarer Navigation Bar
    ========================================= */
 .wayfarer-nav {
