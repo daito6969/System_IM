@@ -1,0 +1,1470 @@
+/* ============================================================
+   TRAVEL PLANNER — Full UI Stylesheet
+   Wayfarer PH · Plan Trip & Flights
+   ============================================================ */
+
+:root {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --ink: #0f172a;
+  --ink-secondary: #475569;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --line-light: #f1f5f9;
+
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --accent-ink: #78350f;
+  --emerald: #10b981;
+  --emerald-light: #d1fae5;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+
+  --navy: #0f172a;
+  --navy-surface: #1e293b;
+
+  --font-head: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 25px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #090e17;
+  --surface: #111a2e;
+  --surface-2: #16223b;
+  --ink: #f8fafc;
+  --ink-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --line: #1e2f4d;
+  --line-light: #16243d;
+  --navy: #060a12;
+  --navy-surface: #0d1527;
+  --accent-light: #2b200b;
+  --accent-ink: #fde68a;
+  --emerald-light: #064e3b;
+  --danger-light: #450a0a;
+}
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Ensure the outer wrapper provided by header.php allows edge-to-edge hero */
+main.page-main-wrap {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  background: linear-gradient(135deg, #0b1322 0%, #16243d 50%, #0e1c31 100%);
+  color: #fff;
+  padding: 52px 0 96px;
+  position: relative;
+}
+
+.hero-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  color: #fff;
+  max-width: 24ch;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.hero p {
+  color: #94a3b8;
+  font-size: 15.5px;
+  max-width: 60ch;
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ============================================================
+   PLANNER CONTAINER (Non-sticky bottom, regular padding)
+   ============================================================ */
+.planner-container {
+  margin-top: -68px;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 40px;
+}
+
+/* ============================================================
+   SEARCH & CONFIG PANEL — Full Width, NOT a square box
+   ============================================================ */
+form.search-panel,
+.search-panel {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 24px 28px !important;
+  box-shadow: var(--shadow-lg) !important;
+  margin-bottom: 28px !important;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+.trip-type {
+  display: flex;
+  gap: 18px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.radio-label input {
+  accent-color: var(--primary);
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.quick-budgets {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.budget-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Quick Budget Pills (Rounded pill shape, never square) */
+button.budget-pill,
+.budget-pill {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink-secondary) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: var(--radius-full) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease !important;
+}
+
+button.budget-pill:hover,
+.budget-pill:hover {
+  background: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+button.budget-pill.active,
+.budget-pill.active {
+  background: var(--accent-light) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-ink) !important;
+  box-shadow: 0 0 0 1px var(--accent) !important;
+}
+
+/* Fields Grid across top search bar */
+.fields-grid {
+  display: grid;
+  grid-template-columns: 1.5fr auto 1.5fr 1.15fr 1.15fr 0.85fr 1.35fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.field-item {
+  display: grid;
+  gap: 6px;
+}
+
+.field-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.search-panel input,
+.search-panel select {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-panel input:focus,
+.search-panel select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+  background: var(--surface);
+}
+
+.currency-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.peso-sign {
+  position: absolute;
+  left: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.currency-wrap input {
+  padding-left: 26px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* Airport Swap Button (Round circular pill icon, NOT an ugly square) */
+button.swap-btn,
+.swap-btn {
+  background: var(--surface-2) !important;
+  border: 1.5px solid var(--line) !important;
+  border-radius: 50% !important;
+  height: 42px !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  color: var(--ink-secondary) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+  margin-bottom: 1px !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+button.swap-btn:hover,
+.swap-btn:hover {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+  transform: rotate(180deg) !important;
+}
+
+/* ---- Standard Buttons ---- */
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3) !important;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4) !important;
+}
+
+.submit-btn {
+  height: 44px;
+  font-size: 14px;
+}
+
+.btn-secondary {
+  background: var(--surface-2) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+}
+
+.btn-secondary:hover {
+  background: var(--line) !important;
+}
+
+.btn-ghost {
+  background: transparent !important;
+  color: var(--muted) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2) !important;
+  color: var(--ink) !important;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ============================================================
+   MAIN LAYOUT GRID (Left Content + Right Flights Sidebar)
+   ============================================================ */
+.planner-main {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 28px;
+}
+
+.planner-left {
+  min-width: 0;
+}
+
+.planner-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.destination-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-light);
+  color: var(--accent-ink);
+  font-weight: 800;
+  font-size: 12.5px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+}
+
+.section-top h2 {
+  font-size: 22px;
+}
+
+.section-sub {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+.act-counter-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   CATEGORY & AIRLINE FILTER CHIPS
+   ============================================================ */
+.category-chips, .airline-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+button.chip,
+.chip {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink-secondary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 6px 14px !important;
+  border-radius: var(--radius-full) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease !important;
+}
+
+button.chip:hover,
+.chip:hover {
+  background: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+button.chip.active,
+.chip.active {
+  background: var(--navy) !important;
+  color: #fff !important;
+  border-color: var(--navy) !important;
+}
+
+:root[data-theme="dark"] button.chip.active,
+:root[data-theme="dark"] .chip.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+/* ============================================================
+   ACTIVITIES GRID
+   ============================================================ */
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.act-card {
+  background: var(--surface-2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.act-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.act-card.selected {
+  border-color: var(--emerald);
+  background: rgba(16, 185, 129, 0.06);
+  box-shadow: 0 0 0 1px var(--emerald);
+}
+
+.act-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.act-cat-tag {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(2, 132, 199, 0.12);
+  color: var(--primary);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.act-cat-tag[data-cat="Day Trips"]        { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
+.act-cat-tag[data-cat="Adventure"]         { background: rgba(245, 158, 11, 0.16); color: #d97706; }
+.act-cat-tag[data-cat="Nature & Wildlife"] { background: rgba(16, 185, 129, 0.16); color: #059669; }
+.act-cat-tag[data-cat="Food & Culture"]    { background: rgba(236, 72, 153, 0.15); color: #db2777; }
+.act-cat-tag[data-cat="Sightseeing"]       { background: rgba(14, 165, 233, 0.15); color: #0284c7; }
+
+.act-duration {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.act-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.act-card p {
+  font-size: 13px;
+  color: var(--ink-secondary);
+  margin: 0 0 14px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.act-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.act-price { display: flex; flex-direction: column; }
+.act-price b { font-size: 16px; font-weight: 800; color: var(--ink); }
+.act-price small { font-size: 11px; color: var(--muted); }
+
+button.act-toggle-btn,
+.act-toggle-btn {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: var(--radius-full) !important;
+  border: 1.5px solid var(--line) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease !important;
+}
+
+button.act-toggle-btn:hover,
+.act-toggle-btn:hover {
+  border-color: var(--emerald) !important;
+  color: var(--emerald) !important;
+}
+
+.act-card.selected button.act-toggle-btn,
+.act-card.selected .act-toggle-btn {
+  background: var(--emerald) !important;
+  border-color: var(--emerald) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   SELECTED PLANS TRAY (below activity grid)
+   ============================================================ */
+.selected-plans-tray {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-top: 20px;
+  transition: all 0.2s ease;
+}
+
+.selected-plans-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.selected-plans-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selected-plans-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.selected-plans-list {
+  display: grid;
+  gap: 8px;
+}
+
+.selected-plan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  transition: border-color 0.15s ease;
+}
+
+.selected-plan-card:hover {
+  border-color: var(--primary);
+}
+
+.plan-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-day-tag {
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.plan-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plan-cost {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+button.plan-rem-btn,
+.plan-rem-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--muted) !important;
+  font-size: 15px !important;
+  padding: 4px 6px !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+}
+
+button.plan-rem-btn:hover,
+.plan-rem-btn:hover {
+  color: var(--danger) !important;
+  background: var(--danger-light) !important;
+}
+
+/* ============================================================
+   CUSTOM ACTIVITY BOX
+   ============================================================ */
+.custom-activity-box {
+  background: var(--surface-2);
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.custom-activity-box h3 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.custom-activity-box p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.custom-act-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.custom-act-form input {
+  flex: 1 1 180px;
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.custom-act-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+
+/* ============================================================
+   STAY / ACCOMMODATION SECTION
+   ============================================================ */
+.stay-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.stay-option-card {
+  background: var(--surface-2);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.stay-option-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.stay-option-card.selected {
+  border-color: var(--emerald);
+  background: rgba(16, 185, 129, 0.06);
+  box-shadow: 0 0 0 1px var(--emerald);
+}
+
+.stay-option-card.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: var(--emerald);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.stay-card-title {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.stay-card-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.stay-free-badge {
+  display: inline-block;
+  background: var(--emerald-light);
+  color: var(--emerald);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+}
+
+.stay-option-card .adjuster-input {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stay-option-card .adjuster-input input {
+  max-width: 100px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+
+.stay-option-card .adjuster-input input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+
+.stay-option-card .adjuster-input small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ============================================================
+   RIGHT SIDEBAR — DOMESTIC FLIGHTS
+   ============================================================ */
+.planner-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flights-sidebar-section {
+  position: sticky;
+  top: 80px;
+}
+
+/* Pinned selected flights banner */
+.selected-flights-banner {
+  margin-bottom: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.selected-flights-banner .banner-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--emerald);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.selected-flights-banner .flight-pick {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--ink);
+  padding: 4px 0;
+}
+
+.selected-flights-banner .flight-pick + .flight-pick {
+  border-top: 1px dashed var(--line);
+  margin-top: 4px;
+  padding-top: 6px;
+}
+
+/* Flight board (dark card) */
+.board {
+  background: var(--navy);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.flight-sidebar-board {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.flight-sidebar-board::-webkit-scrollbar { width: 5px; }
+.flight-sidebar-board::-webkit-scrollbar-track { background: transparent; }
+.flight-sidebar-board::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+/* Flight card row */
+.flight-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.15s ease;
+}
+
+.flight-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.flight-row:last-child {
+  border-bottom: none;
+}
+
+.flight-row.selected {
+  background: rgba(2, 132, 199, 0.12);
+  border-left: 3px solid #38bdf8;
+}
+
+.flight-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flight-times {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fbbf24;
+  white-space: nowrap;
+}
+
+.flight-times span {
+  color: #475569;
+  font-size: 14px;
+  margin: 0 3px;
+}
+
+.flight-details h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.flight-details small {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.flight-row-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.flight-price {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.flight-price small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.flight-action .btn {
+  font-size: 12px;
+  padding: 6px 14px;
+}
+
+.flight-action .btn-selected {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: var(--emerald) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  box-shadow: none !important;
+}
+
+.empty {
+  padding: 36px 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-control select {
+  width: auto;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+
+/* Flight change link */
+button.flight-change-btn,
+.flight-change-btn {
+  background: none !important;
+  border: none !important;
+  color: var(--primary) !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  padding: 2px 6px !important;
+  text-decoration: underline !important;
+  box-shadow: none !important;
+}
+
+button.flight-change-btn:hover,
+.flight-change-btn:hover {
+  color: var(--primary-hover) !important;
+}
+
+/* ============================================================
+   PLANNER SUMMARY & BOOKING SECTION (In-flow, NOT sticky)
+   ============================================================ */
+.planner-summary-section {
+  position: static !important;
+  background: var(--navy);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+}
+
+:root[data-theme="dark"] .planner-summary-section {
+  background: var(--navy-surface);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.summary-section-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summary-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-route-badge {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.summary-breakdown-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.breakdown-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.breakdown-pill b {
+  color: #fff;
+  font-weight: 700;
+}
+
+.summary-actions-wrap {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summary-total-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.summary-total-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.summary-total-val {
+  font-family: var(--font-head);
+  font-size: 26px;
+  color: #fbbf24;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 2px 0;
+}
+
+.summary-balance-lbl {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--emerald);
+}
+
+.summary-book-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #0f172a !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  padding: 13px 26px !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4) !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.summary-book-btn:hover {
+  filter: brightness(1.1) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* ============================================================
+   DIALOG MODAL — Booking Confirmation with KYC
+   ============================================================ */
+dialog {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  width: min(560px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.dialog-card {
+  padding: 28px;
+  display: grid;
+  gap: 18px;
+  max-width: 100% !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.dialog-header h2 {
+  font-size: 20px;
+}
+
+button.close-x,
+.close-x {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line) !important;
+  font-size: 16px !important;
+  color: var(--muted) !important;
+  cursor: pointer !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transition: all 0.15s !important;
+}
+
+button.close-x:hover,
+.close-x:hover {
+  background: var(--danger-light) !important;
+  color: var(--danger) !important;
+  border-color: var(--danger) !important;
+}
+
+.dialog-body {
+  display: grid;
+  gap: 14px;
+}
+
+.dialog-route-banner {
+  background: linear-gradient(135deg, #0284c7, #0f172a);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modal-summary-section {
+  margin-bottom: 2px;
+}
+
+.modal-summary-section h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.sum-details {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
+}
+
+.sum-details div {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* KYC Section inside modal */
+.kyc-section {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  margin-top: 4px;
+}
+
+.kyc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kyc-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.kyc-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--emerald-light);
+  color: var(--emerald);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.kyc-hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.kyc-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.kyc-fields label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  display: grid;
+  gap: 5px;
+}
+
+.kyc-fields input,
+.kyc-fields select {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  width: 100%;
+}
+
+.kyc-fields input:focus,
+.kyc-fields select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* ============================================================
+   TOAST (Normal bottom position, no sticky bar conflict)
+   ============================================================ */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy-surface);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-lg);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999;
+  max-width: 90vw;
+  text-align: center;
+}
+
+#toast.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .fields-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  button.swap-btn,
+  .swap-btn {
+    display: none !important;
+  }
+  .planner-main {
+    grid-template-columns: 1fr;
+  }
+  .flights-sidebar-section {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-section-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .summary-total-block {
+    align-items: flex-start;
+  }
+  .summary-actions-wrap {
+    justify-content: space-between;
+  }
+  .summary-book-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 32px 0 72px; }
+  .hero h1 { font-size: 24px; }
+  form.search-panel,
+  .search-panel { padding: 18px !important; }
+  .planner-card { padding: 18px; }
+
+  .stay-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kyc-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+}

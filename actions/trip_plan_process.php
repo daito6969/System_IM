@@ -2,7 +2,7 @@
 require '../includes/auth.php';
 header('Content-Type: application/json');
 
-if (!user() || user()['role'] !== 'traveler') {
+if (!user() || !in_array(user()['role'], ['traveler', 'admin'])) {
   http_response_code(403);
   exit(json_encode(['ok' => false, 'error' => 'Please log in as a traveler']));
 }
@@ -17,7 +17,12 @@ $end_date = !empty($in['end_date']) ? $in['end_date'] : null;
 $pax = max(1, min(9, (int)($in['pax'] ?? 1)));
 $legs = array_map('intval', $in['legs'] ?? []);
 $activities = is_array($in['activities'] ?? null) ? $in['activities'] : [];
-$hotel_est = max(0, (float)($in['hotel_est'] ?? 0));
+$stay_type = trim($in['stay_type'] ?? 'hotel');
+$hotel_est = $stay_type === 'relative' ? 0.0 : max(0, (float)($in['hotel_est'] ?? 0));
+$contact_phone = trim($in['contact_phone'] ?? '');
+$contact_email = trim($in['contact_email'] ?? '');
+$kyc_id_type = trim($in['kyc_id_type'] ?? '');
+$kyc_id_number = trim($in['kyc_id_number'] ?? '');
 
 if (!$title) {
   $title = "Trip to " . $destination . ($budget > 0 ? " (₱" . number_format($budget) . " Budget)" : "");
@@ -43,17 +48,23 @@ try {
       $flight_total += $f['price'] * $pax;
     }
     $flight_ref = 'PH-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 6));
-    $pdo->prepare('INSERT INTO flight_bookings(ref, user_id, flight_id, return_flight_id, pax, total) VALUES(?,?,?,?,?,?)')
-        ->execute([$flight_ref, user()['id'], $legs[0], $legs[1] ?? null, $pax, $flight_total]);
+    $pdo->prepare('INSERT INTO flight_bookings(ref, user_id, flight_id, return_flight_id, pax, contact_phone, contact_email, kyc_id_type, kyc_id_number, total) VALUES(?,?,?,?,?,?,?,?,?,?)')
+        ->execute([$flight_ref, user()['id'], $legs[0], $legs[1] ?? null, $pax, $contact_phone, $contact_email, $kyc_id_type, $kyc_id_number, $flight_total]);
 
     foreach ($legs as $fid) {
       $pdo->prepare('UPDATE flights SET seats=seats-? WHERE id=?')->execute([$pax, $fid]);
     }
+
+    // Save KYC to user profile for 2nd booking autofill
+    if (!empty($kyc_id_number)) {
+      $pdo->prepare('UPDATE users SET phone=?, id_type=?, id_number=?, kyc_verified=1 WHERE id=?')
+          ->execute([$contact_phone, $kyc_id_type, $kyc_id_number, user()['id']]);
+    }
   }
 
   // 2. Create the unified Trip
-  $stmtTrip = $pdo->prepare('INSERT INTO trips(user_id, title, destination, budget, start_date, end_date) VALUES(?,?,?,?,?,?)');
-  $stmtTrip->execute([user()['id'], $title, $destination, $budget, $start_date, $end_date]);
+  $stmtTrip = $pdo->prepare('INSERT INTO trips(user_id, title, destination, budget, stay_type, stay_cost, start_date, end_date) VALUES(?,?,?,?,?,?,?,?)');
+  $stmtTrip->execute([user()['id'], $title, $destination, $budget, $stay_type, $hotel_est, $start_date, $end_date]);
   $trip_id = (int)$pdo->lastInsertId();
 
   // 3. Insert planned activities into itineraries
@@ -82,8 +93,10 @@ try {
   if ($total_activities_cost > 0) {
     $exp_stmt->execute([$trip_id, 'Activities & Tours', $total_activities_cost, 'Planned destination attractions & tours']);
   }
-  if ($hotel_est > 0) {
-    $exp_stmt->execute([$trip_id, 'Accommodation & Food', $hotel_est, 'Estimated stay & dining budget allocation']);
+  if ($stay_type === 'relative') {
+    $exp_stmt->execute([$trip_id, 'Accommodation & Meals', 0.0, "Staying at relative's / friend's place (₱0 Free accommodation & home meals)"]);
+  } elseif ($hotel_est > 0) {
+    $exp_stmt->execute([$trip_id, 'Accommodation & Meals', $hotel_est, 'Estimated stay & dining budget allocation']);
   }
 
   $pdo->commit();

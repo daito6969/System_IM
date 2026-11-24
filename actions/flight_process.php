@@ -1,4 +1,15 @@
-<?php require '../includes/auth.php'; require_role(['admin']);
+<?php 
+require '../includes/auth.php'; 
+require_role(['admin']);
+
+if (($_POST['action'] ?? '') === 'delete') {
+  try {
+    $pdo->prepare('DELETE FROM flights WHERE id=?')->execute([(int)$_POST['id']]);
+  } catch (PDOException $e) {}
+  header('Location: ' . BASE . '/admin/flights.php');
+  exit;
+}
+
 if (($_POST['action'] ?? '') === 'generate') {          // fills the next 30 days with sample flights
   $routes = [['MNL','CEB',570],['MNL','DVO',950],['MNL','KLO',300],['MNL','PPS',590],['MNL','ILO',470],['MNL','CGY',800],['CEB','DVO',520]];
   $air = [['PR','Philippine Airlines',1.35],['5J','Cebu Pacific',1],['Z2','AirAsia Philippines',.93],['2P','PAL Express',1.12]];
@@ -12,7 +23,8 @@ if (($_POST['action'] ?? '') === 'generate') {          // fills the next 30 day
   }
   $pdo->commit();
 } else {
+  $depart_at = str_replace('T', ' ', trim($_POST['depart_at'] ?? ''));
   $pdo->prepare('INSERT INTO flights(origin,dest,depart_at,duration_min,airline,flight_no,price,seats) VALUES(?,?,?,?,?,?,?,?)')
-      ->execute([strtoupper($_POST['origin']), strtoupper($_POST['dest']), $_POST['depart_at'], (int)$_POST['duration_min'], trim($_POST['airline']), trim($_POST['flight_no']), (float)$_POST['price'], (int)$_POST['seats']]);
+      ->execute([strtoupper($_POST['origin']), strtoupper($_POST['dest']), $depart_at, (int)$_POST['duration_min'], trim($_POST['airline']), trim($_POST['flight_no']), (float)$_POST['price'], (int)$_POST['seats']]);
 }
 header('Location: ' . BASE . '/admin/flights.php');

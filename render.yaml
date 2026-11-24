@@ -1,21 +1,18 @@
 services:
   - type: web
-    name: system-im
+    name: wayfarer-ph
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
-    dockerContext: .
-    healthCheckPath: /login.php
     envVars:
-      - key: APP_ENV
-        value: production
       - key: DB_HOST
         sync: false
       - key: DB_PORT
         sync: false
+        value: 3306
       - key: DB_NAME
         sync: false
       - key: DB_USER
         sync: false
-      - key: DB_PASSWORD
+      - key: DB_PASS
         sync: false

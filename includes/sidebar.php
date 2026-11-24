@@ -4,10 +4,10 @@ $menus = [
     'dashboard'    => 'Dashboard',
     'travel'       => 'Plan Trip & Flights',
     'my_trips'     => 'My Trips',
+    'bookings'     => 'Bookings & Flights',
     'itinerary'    => 'Itinerary',
     'expenses'     => 'Expenses',
-    'destinations' => 'Destinations',
-    'bookings'     => 'Bookings'
+    'destinations' => 'Destinations'
   ],
   'staff'    => [
     'dashboard'   => 'Dashboard',
