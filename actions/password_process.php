@@ -1,15 +1,25 @@
-<?php 
-require '../includes/auth.php'; 
+<?php
+require '../includes/auth.php';
 require_role(['admin', 'staff', 'traveler']);
 
-$s = $pdo->prepare('SELECT password_hash FROM users WHERE id=?'); 
-$s->execute([user()['id']]);
-$ok = password_verify($_POST['current'] ?? '', (string)$s->fetchColumn()) && strlen($_POST['new'] ?? '') >= 6;
+$current = $_POST['current'] ?? '';
+$new = $_POST['new'] ?? '';
 
-if ($ok) {
-  $pdo->prepare('UPDATE users SET password_hash=? WHERE id=?')->execute([password_hash($_POST['new'], PASSWORD_DEFAULT), user()['id']]);
-  header('Location: ' . BASE . '/account.php?ok=1');
-} else {
-  header('Location: ' . BASE . '/account.php?msg=' . urlencode('Wrong current password, or new password is shorter than 6 characters.'));
+if (strlen($new) < 6) {
+  header('Location: ' . BASE . '/account.php?msg=' . urlencode('New password must be at least 6 characters.'));
+  exit;
 }
-exit;
+
+$stmt = $pdo->prepare('SELECT password_hash FROM users WHERE id=?');
+$stmt->execute([user()['id']]);
+$hash = $stmt->fetchColumn();
+
+if (!$hash || !password_verify($current, $hash)) {
+  header('Location: ' . BASE . '/account.php?msg=' . urlencode('Current password is incorrect.'));
+  exit;
+}
+
+$pdo->prepare('UPDATE users SET password_hash=? WHERE id=?')
+    ->execute([password_hash($new, PASSWORD_DEFAULT), user()['id']]);
+
+header('Location: ' . BASE . '/account.php?ok=1');

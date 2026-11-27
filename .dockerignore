@@ -2,9 +2,6 @@
 .github
 .vscode
 .freebuff
-database
-*.sql
-**/*.sql
 README.md
 Dockerfile
 render.yaml

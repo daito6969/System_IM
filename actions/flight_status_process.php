@@ -1,41 +1,32 @@
-<?php 
-require '../includes/auth.php'; 
+<?php
+require '../includes/auth.php';
 require_role(['staff', 'admin']);
 
-$id = (int)$_POST['id']; 
-$st = $_POST['status'] ?? '';
+$id = (int)($_POST['id'] ?? 0);
+$status = $_POST['status'] ?? '';
 
-if (in_array($st, ['confirmed', 'delayed', 'cancelled'])) {
+if (($_POST['action'] ?? '') === 'status' && in_array($status, ['confirmed', 'delayed', 'cancelled'])) {
   $pdo->beginTransaction();
-  $s = $pdo->prepare('SELECT * FROM flight_bookings WHERE id=? FOR UPDATE'); 
-  $s->execute([$id]); 
-  $b = $s->fetch();
-  if ($b && $b['status'] !== $st) {
-    $oldSt = $b['status'];
-    $pdo->prepare('UPDATE flight_bookings SET status=? WHERE id=?')->execute([$st, $id]);
+  $s = $pdo->prepare('SELECT * FROM flight_bookings WHERE id=? FOR UPDATE');
+  $s->execute([$id]);
+  if ($b = $s->fetch()) {
+    $wasActive = in_array($b['status'], ['confirmed', 'delayed']);
+    $nowCancelled = ($status === 'cancelled');
+    $pdo->prepare('UPDATE flight_bookings SET status=? WHERE id=?')->execute([$status, $id]);
 
-    // Seat adjustment logic:
-    // - If previously cancelled and now confirmed or delayed: re-reserve seats (- pax)
-    // - If previously confirmed or delayed and now cancelled: return seats (+ pax)
-    // - Moving between confirmed and delayed maintains seat reservation
-    if ($oldSt === 'cancelled' && in_array($st, ['confirmed', 'delayed'])) {
-      foreach (array_filter([$b['flight_id'], $b['return_flight_id']]) as $f) {
-        $pdo->prepare("UPDATE flights SET seats=seats - ? WHERE id=?")->execute([$b['pax'], $f]);
+    // Restore seats if cancelled from an active state
+    if ($wasActive && $nowCancelled) {
+      foreach (array_filter([$b['flight_id'], $b['return_flight_id']]) as $fid) {
+        $pdo->prepare('UPDATE flights SET seats=seats+? WHERE id=?')->execute([$b['pax'], $fid]);
       }
-    } elseif (in_array($oldSt, ['confirmed', 'delayed']) && $st === 'cancelled') {
-      foreach (array_filter([$b['flight_id'], $b['return_flight_id']]) as $f) {
-        $pdo->prepare("UPDATE flights SET seats=seats + ? WHERE id=?")->execute([$b['pax'], $f]);
+    } elseif (!$wasActive && !$nowCancelled) {
+      // Re-deduct seats if restored from cancelled
+      foreach (array_filter([$b['flight_id'], $b['return_flight_id']]) as $fid) {
+        $pdo->prepare('UPDATE flights SET seats=GREATEST(0, seats-?) WHERE id=?')->execute([$b['pax'], $fid]);
       }
     }
   }
   $pdo->commit();
 }
 
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) || str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json')) {
-  header('Content-Type: application/json');
-  exit(json_encode(['ok' => true]));
-}
-
-$back = user()['role'] === 'admin' ? BASE . '/admin/reports.php' : BASE . '/staff/dashboard.php';
-header('Location: ' . $back);
-exit;
+header('Location: ' . BASE . '/' . (user()['role'] === 'staff' ? 'staff/dashboard.php' : 'admin/reports.php'));
